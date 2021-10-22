@@ -48,20 +48,14 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
     
-- task: LambdaDeployFunction@1
+- task: LambdaNETCoreDeploy@1
   inputs:
     awsCredentials: 'awsconnection'
     regionName: 'ap-south-1'
-    deploymentMode: 'codeonly'
-    functionName: 'ApplicationSubmission'
-    codeLocation: 'localfile'
-    localZipFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-
-- task: LambdaDeployFunction@1
-  inputs:
-    awsCredentials: 'awsconnection'
-    regionName: 'ap-south-1'
-    deploymentMode: 'codeonly'
-    functionName: 'ApplicationSubmission'
-    codeLocation: 'localfile'
-    localZipFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    command: 'deployServerless'
+    packageOnly: false
+    lambdaProjectPath: './ApplicationSubmission'
+    stackName: 'ApplicationSubmission'
+    s3Bucket: 'pblambdafunctions'
+    s3Prefix: 'ApplicationSubmission'
+    additionalArgs: 'deploy-function ApplicationSubmission --function-role azure-lambda-role'
