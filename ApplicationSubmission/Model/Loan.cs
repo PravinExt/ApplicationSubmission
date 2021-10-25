@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,7 @@ namespace ApplicationSubmission.Model
         public string LoanApplication_Description { get; set; }
         public int LoanApplication_Status { get; set; }
         public string LoanApplication_BankerComment { get; set; }
+        public IFormFile[] LoanDocument { get; set; }
 
         public List<Loan> Get_All_Loan(int Business_ID)
         {

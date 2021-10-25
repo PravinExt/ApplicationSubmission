@@ -10,6 +10,8 @@ using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Amazon;
+using System.Net.Http;
 
 namespace ApplicationSubmission.Controllers
 {
@@ -18,6 +20,7 @@ namespace ApplicationSubmission.Controllers
     public class DocumentController : ControllerBase
     {
         Amazon.S3.IAmazonS3 client { get; set; }
+
         string bucketName { get; set; }
 
         public DocumentController()
@@ -30,6 +33,9 @@ namespace ApplicationSubmission.Controllers
         [HttpGet("{loanid}")]
         public async Task Get(int loanid, string filename)
         {
+            this.Response.ContentType = "application/json";
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             try
             {
                 var getResponse = await client.GetObjectAsync(new GetObjectRequest
@@ -86,15 +92,21 @@ namespace ApplicationSubmission.Controllers
 
         // POST: applicationsubmission/Document
         [HttpPost("{loanid}")]
-        public async Task<System.Net.HttpStatusCode> Post(int loanid, IFormFile[] myfile)
+        public async Task<System.Net.HttpStatusCode> Post(int loanid, [FromForm(Name = "body")]IFormFile[] myfile)
         {
+            this.Response.ContentType = "application/json";
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             return await PutFileOnBucket(loanid, myfile);
         }
 
         // PUT: applicationsubmission/Document/5
         [HttpPut("{loanid}")]
-        public async Task<System.Net.HttpStatusCode> Put(int loanid, IFormFile[] myfile)
+        public async Task<System.Net.HttpStatusCode> Put(int loanid, [FromForm(Name = "body")]IFormFile[] myfile)
         {
+            this.Response.ContentType = "application/json";
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             return await PutFileOnBucket(loanid, myfile);
         }
 
@@ -102,8 +114,12 @@ namespace ApplicationSubmission.Controllers
         [HttpDelete("{loanid}")]
         public async Task<System.Net.HttpStatusCode> Delete(int loanid, string filename)
         {
+            this.Response.ContentType = "application/json";
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             DeleteObjectResponse response = new DeleteObjectResponse();
             DeleteObjectRequest request = new DeleteObjectRequest
+
             {
                 BucketName = bucketName,
                 Key = loanid.ToString() + "/" + filename
@@ -112,6 +128,27 @@ namespace ApplicationSubmission.Controllers
             // Issue request
             response = await client.DeleteObjectAsync(request);
             return response.HttpStatusCode;
+        }
+
+        // Options: applicationsubmission/ApiWithActions/5
+        [HttpDelete("{id}")]
+        public JsonResult Options(int id)
+        {
+            try
+            {
+                HttpResponseMessage res = new HttpResponseMessage();
+
+                this.Response.ContentType = "application/json";
+                this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                return new JsonResult(res, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            }
+            catch (Exception ex)
+            {
+                this.Response.StatusCode = 400;
+                return new JsonResult(ex.Message);
+            }
+
         }
     }
 }

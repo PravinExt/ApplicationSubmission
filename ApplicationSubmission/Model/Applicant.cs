@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,6 +19,7 @@ namespace ApplicationSubmission.Model
         public string Applicant_dob { get; set; }
         public string Applicant_email { get; set; }
         public string Applicant_mobno { get; set; }
+        //public string Applicant_Document { get; set; }
 
 
         public Applicant Get_ApplicantDetails(int id, string emailid)
@@ -71,8 +73,11 @@ namespace ApplicationSubmission.Model
                     appobj.Applicant_dob = Convert.ToDateTime(AppReader["Applicant_dob"].ToString()).ToShortDateString();
                     appobj.Applicant_email = AppReader["Applicant_email"].ToString();
                     appobj.Applicant_mobno = AppReader["Applicant_mobno"].ToString();
-                    //appobj.Applicant_username = AppReader["Customer_username"].ToString();
-                    //appobj.Applicant_password = AppReader["Customer_password"].ToString();
+                    //if (AppReader["ApplicantDocument"] != null)
+                    //{
+                    //    appobj.Applicant_Document = AppReader["ApplicantDocument"].ToString();
+                    //}
+
                 }
 
                 return appobj;
@@ -112,6 +117,10 @@ namespace ApplicationSubmission.Model
                     appobj.Applicant_dob = Convert.ToDateTime(AppReader["Applicant_dob"].ToString()).ToShortDateString();
                     appobj.Applicant_email = AppReader["Applicant_email"].ToString();
                     appobj.Applicant_mobno = AppReader["Applicant_mobno"].ToString();
+                    //if (AppReader["ApplicantDocument"] != null)
+                    //{
+                    //    appobj.Applicant_Document = AppReader["ApplicantDocument"].ToString();
+                    //}
                 }
 
                 return appobj;
@@ -144,6 +153,7 @@ namespace ApplicationSubmission.Model
                 app_para[5] = new MySqlParameter("Applicant_dob", AppPara.Applicant_dob);
                 app_para[6] = new MySqlParameter("Applicant_email", AppPara.Applicant_email);
                 app_para[7] = new MySqlParameter("Applicant_mobno", AppPara.Applicant_mobno);
+                //app_para[8] = new MySqlParameter("Applicant_Document", AppPara.Applicant_Document);
 
 
                 int r = Convert.ToInt32(dbHelper.ExecuteScalar("Add_ApplicantInfo", DBHelper.QueryType.StotedProcedure, app_para));

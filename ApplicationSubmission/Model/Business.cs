@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace ApplicationSubmission.Model
         public string Business_ContactNo { get; set; }
         public string Business_Address { get; set; }
         public string Business_Description { get; set; }
+        //public string Business_Document { get; set; }
 
         public List<Business> Get_All_Business(int Applicant_ID)
         {
@@ -37,6 +39,10 @@ namespace ApplicationSubmission.Model
                     busiobj.Business_ContactNo = busiReader["BusinessContactNo"].ToString();
                     busiobj.Business_Address = busiReader["BusinessAddress"].ToString();
                     busiobj.Business_Description = busiReader["BusinessDescription"].ToString();
+                    //if (busiReader["BusinessDocument"] != null)
+                    //{
+                    //    busiobj.Business_Document = busiReader["BusinessDocument"].ToString();
+                    //}
 
                     busilist.Add(busiobj);
                 }
@@ -74,6 +80,10 @@ namespace ApplicationSubmission.Model
                     busiobj.Business_ContactNo = busiReader["BusinessContactNo"].ToString();
                     busiobj.Business_Address = busiReader["BusinessAddress"].ToString();
                     busiobj.Business_Description = busiReader["BusinessDescription"].ToString();
+                    //if (busiReader["BusinessDocument"] != null)
+                    //{
+                    //    busiobj.Business_Document = busiReader["BusinessDocument"].ToString();
+                    //}
                 }
 
                 return busiobj;
@@ -103,6 +113,7 @@ namespace ApplicationSubmission.Model
                 busi_para[2] = new MySqlParameter("Business_ContactNo", BusiPara.Business_ContactNo);
                 busi_para[3] = new MySqlParameter("Business_Address", BusiPara.Business_Address);
                 busi_para[4] = new MySqlParameter("Business_Description", BusiPara.Business_Description);
+                //busi_para[5] = new MySqlParameter("Business_Document", BusiPara.Business_Document);
 
                 int r = Convert.ToInt32(dbHelper.ExecuteScalar("Add_BusinessInfo", DBHelper.QueryType.StotedProcedure, busi_para));
 
