@@ -14,39 +14,7 @@ variables:
 
 steps:
 
-- script: | 
-    dotnet restore ApplicationSubmission.sln
-    ls
-  displayName: 'dotnet restore'
 
-- script: | 
-    dotnet clean ApplicationSubmission.sln
-    ls
-  displayName: 'dotnet clean'
-
-- script: | 
-    dotnet build ApplicationSubmission.sln --configuration Release
-    ls
-    cd /home/vsts/work/1/s/ApplicationSubmission/bin/Debug/netcoreapp2.1/
-    ls -al
-    pwd
-  displayName: 'dotnet build'
-  
-- script: | 
-    dotnet publish ApplicationSubmission.sln -o "Publish"
-    ls
-    cd Publish
-    ls -al
-    pwd
-  displayName: 'dotnet build'
-
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: 'Publish'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
     
 - task: LambdaNETCoreDeploy@1
   inputs:
