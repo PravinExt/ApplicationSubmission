@@ -61,8 +61,12 @@
                 }
               ]
             },
+<<<<<<< HEAD
 			"Database": "ApplicationSubmission",
 			"Port":"3306"
+=======
+            "Database": "ApplicationSubmission"
+>>>>>>> f74342c1237c48ccf19e4eb0468ca05c6f7c66bf
           }
         },
         "Events": {
