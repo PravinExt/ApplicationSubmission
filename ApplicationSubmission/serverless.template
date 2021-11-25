@@ -61,7 +61,8 @@
                 }
               ]
             },
-			"Database": "ApplicationSubmission"
+			"Database": "ApplicationSubmission",
+			"Port":"3306"
           }
         },
         "Events": {
