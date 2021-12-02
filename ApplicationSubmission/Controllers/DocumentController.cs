@@ -25,8 +25,10 @@ namespace ApplicationSubmission.Controllers
 
         public DocumentController()
         {
-            client = new AmazonS3Client(Amazon.RegionEndpoint.APSouth1);
-            bucketName = "pbloandocuments";
+            string RegionName = Environment.GetEnvironmentVariable("LoanDocumentBucketRegion");
+            client = new AmazonS3Client(RegionEndpoint.GetBySystemName(RegionName));
+            //bucketName = "pbloandocuments";
+            bucketName = Environment.GetEnvironmentVariable("LoanDocumentBucket");
         }
 
         // GET: applicationsubmission/Document/5
