@@ -65,7 +65,8 @@
               "Port":"3306",
               "PWD":"admin8910",
               "Server":"applicationsubmission.cikv7fwlsku8.ap-south-1.rds.amazonaws.com",
-              "UID":"admin"
+              "UID":"admin",
+              "LoanDocumentBucket":"spbloandoc66"
             }
           },
           "Events": {
