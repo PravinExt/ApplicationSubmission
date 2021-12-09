@@ -3,6 +3,7 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
+
 trigger:
 - main
 
@@ -13,15 +14,46 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: | 
+    dotnet restore ApplicationSubmission.sln
+    ls
+  displayName: 'dotnet restore'
 
-- task: LambdaNETCoreDeploy@1
+
+- script: | 
+    dotnet build ApplicationSubmission.sln
+    ls
+    cd /home/vsts/work/1/s/ApplicationSubmission/bin/Debug/netcoreapp2.1/
+    ls -al
+    pwd
+  displayName: 'dotnet build'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '/home/vsts/work/1/s/ApplicationSubmission/bin/Debug/netcoreapp2.1/'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+steps:
+
+- task: LambdaDeployFunction@1
   inputs:
     awsCredentials: 'awsconnection'
     regionName: 'ap-south-1'
-    command: 'deployServerless'
-    packageOnly: false
-    lambdaProjectPath: './ApplicationSubmission'
-    stackName: 'ApplicationSubmission'
-    s3Bucket: 'pblambdafunctions'
-    s3Prefix: 'ApplicationSubmission'
-    additionalArgs: '--environment "Variables={Database=ApplicationSubmission,Port=3306,PWD=admin8910,Server=applicationsubmission.cikv7fwlsku8.ap-south-1.rds.amazonaws.com,UID=admin}"'
+    deploymentMode: 'codeandconfiguration'
+    functionName: 'ApplicationSubmission'
+    functionHandler: ApplicationSubmission::ApplicationSubmission.LambdaEntryPoint::FunctionHandlerAsync'
+    runtime: 'dotnetcore2.1'
+    codeLocation: 'localfile'
+    localZipFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    roleARN: 'arn:aws:iam::618393550001:role/azure-lambda-role'
+    environment: |
+      Database=LoanApproval
+      Port=3306
+      PWD=admin8910
+      Server=applicationsubmission.cikv7fwlsku8.ap-south-1.rds.amazonaws.com
+      UID=admin
+      LoanDocumentBucket=pblambdafunctions
+      LoanDocumentBucketRegion=ap-south-1
