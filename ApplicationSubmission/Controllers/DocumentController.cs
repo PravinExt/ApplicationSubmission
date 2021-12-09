@@ -94,7 +94,7 @@ namespace ApplicationSubmission.Controllers
 
         // POST: applicationsubmission/Document
         [HttpPost("{loanid}")]
-        public async Task<System.Net.HttpStatusCode> Post(int loanid, [FromForm(Name = "body")]IFormFile[] myfile)
+        public async Task<System.Net.HttpStatusCode> Post(int loanid, IFormFile[] myfile)
         {
             this.Response.ContentType = "application/json";
             this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
@@ -104,7 +104,7 @@ namespace ApplicationSubmission.Controllers
 
         // PUT: applicationsubmission/Document/5
         [HttpPut("{loanid}")]
-        public async Task<System.Net.HttpStatusCode> Put(int loanid, [FromForm(Name = "body")]IFormFile[] myfile)
+        public async Task<System.Net.HttpStatusCode> Put(int loanid, IFormFile[] myfile)
         {
             this.Response.ContentType = "application/json";
             this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
