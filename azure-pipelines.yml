@@ -36,7 +36,6 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-steps:
 
 - task: LambdaDeployFunction@1
   inputs:
